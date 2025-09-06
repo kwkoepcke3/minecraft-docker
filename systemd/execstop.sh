@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-. .env
+. /opt/minecraft/run/systemd/.env
 
 mcrcon -H $IPV4 -p $PASSWORD stop
 if [ "$?" -ne "0" ]; then
