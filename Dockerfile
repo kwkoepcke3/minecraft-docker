@@ -10,7 +10,7 @@ WORKDIR /opt/minecraft/build/mcrcon
 RUN make clean
 RUN make
 
-FROM docker.io/fedora:rawhide
+FROM docker.io/fedora:40
 
 RUN dnf install -y adoptium-temurin-java-repository
 RUN sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/adoptium-temurin-java-repository.repo
