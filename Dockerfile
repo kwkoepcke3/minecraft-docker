@@ -12,9 +12,14 @@ RUN make
 
 FROM docker.io/fedora:40
 
+ARG JRE_VERSION="21"
+
+RUN groupadd --non-unique --gid 988 minecraft
+RUN useradd minecraft -u 990 -g 988 --system -s /bin/bash
+
 RUN dnf install -y adoptium-temurin-java-repository
 RUN sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/adoptium-temurin-java-repository.repo
-RUN dnf install -y cronie python3 python3-pip temurin-17-jre supervisor
+RUN dnf install -y cronie python3 python3-pip temurin-${JRE_VERSION}-jre supervisor procps-ng
 RUN dnf clean all
 RUN pip install dotenv
 
@@ -31,6 +36,8 @@ RUN echo "0 3,15 * * * root /opt/minecraft/run/backup/backup.sh" > /etc/cron.d/m
 RUN chmod 0644 /etc/cron.d/mycron
 RUN crontab /etc/cron.d/mycron
 RUN touch /var/log/cron.log
+
+RUN chown root:minecraft -R /opt/minecraft
 
 # server, rcon
 EXPOSE 25565 25575
